@@ -1,0 +1,498 @@
+{
+	"info": {
+		"_postman_id": "22b544d3-ae6f-4712-8e1c-8b24d773eb72",
+		"name": "udacity-c2-basic-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20394430"
+	},
+	"item": [
+		{
+			"name": "exercise",
+			"item": [
+				{
+					"name": "/cars all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/cars/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"cars",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/cars filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"  const expectedObject = ",
+									"    {",
+									"        \"make\": \"toyota\",",
+									"        \"type\": \"sedan\",",
+									"        \"model\": \"prius\",",
+									"        \"cost\": 22,",
+									"        \"id\": 2",
+									"    };",
+									"  pm.expect(pm.response.json()[0]).to.deep.include(expectedObject);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/cars/?make=toyota",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"cars",
+								""
+							],
+							"query": [
+								{
+									"key": "make",
+									"value": "toyota"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "404 /cars by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"Body matches string\", () => {",
+									"pm.expect(pm.response.text()).to.include(`car not found`);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/cars/:carId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"cars",
+								":carId"
+							],
+							"variable": [
+								{
+									"key": "carId",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/cars by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response matches expectedObject\", () => {",
+									"    const expectedObject = {",
+									"        make: 'honda', type: 'sedan', model: 'civic', cost: 22, id: 3 ",
+									"    }",
+									"pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8082/cars/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"cars",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/cars",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"  const expectedObject = {",
+									"    \"make\": \"tesla\",",
+									"    \"type\": \"eletric\",",
+									"    \"model\": \"focus\",",
+									"    \"cost\": 12,",
+									"    \"id\": 10",
+									"};",
+									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Body matches object\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.make).to.be.a('string');",
+									"    pm.expect(responseJson.type).to.be.a('string');",
+									"    pm.expect(responseJson.model).to.be.a('string');",
+									"    pm.expect(responseJson.cost).to.be.a('number');",
+									"    pm.expect(responseJson.id).to.be.a('number');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"make\": \"tesla\", \"type\": \"eletric\", \"model\": \"focus\", \"cost\": 12, \"id\": 10 }\n"
+						},
+						"url": {
+							"raw": "http://localhost:8082/cars",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "http://localhost:8082/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Welcome to the Cloud!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8082/persons/george",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(`Welcome to the Cloud, George!`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/persons/:name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"persons",
+						":name"
+					],
+					"variable": [
+						{
+							"key": "name",
+							"value": "George"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8082/persons/:name Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    var query = {};",
+							"    pm.request.url.query.all().forEach((p) => { query[p.key] = p.value});",
+							"    ",
+							"    pm.expect(pm.response.text()).to.include(`Welcome to the Cloud, ${query['name']}!`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/persons?name=george",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"persons"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "george"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8082/persons/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(`Welcome to the Cloud, james!`);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"james\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8082/persons",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"persons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 http://localhost:8082/persons/:name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8082/persons/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"persons",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "endpoint",
+			"value": "http://localhost:8082",
+			"type": "string"
+		}
+	]
+}
